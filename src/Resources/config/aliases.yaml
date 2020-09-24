@@ -1,0 +1,3 @@
+services:
+  Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter: '@rikudou.dynamo_cache.adapter'
+  Rikudou\DynamoDbCache\DynamoDbCache: '@rikudou.dynamo_cache.cache'

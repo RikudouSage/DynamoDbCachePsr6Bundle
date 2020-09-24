@@ -1,0 +1,24 @@
+name: Tests
+on: [push]
+
+jobs:
+  code_style:
+    name: Test code style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install
+      - name: Test code style
+        run: composer fixer -- --dry-run
+  static_analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install
+      - name: Run static analysis
+        run: composer phpstan

@@ -1,0 +1,5 @@
+parameters:
+  excludes_analyse:
+    - src/DependencyInjection/Configuration.php
+  ignoreErrors:
+    - '#Return type .*? of method .*?DynamoDbCacheAdapter::getItems.*? should be compatible .*#'

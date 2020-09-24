@@ -1,0 +1,8 @@
+services:
+  rikudou.dynamo_cache.cache: # arguments defined in extension
+    class: Rikudou\DynamoDbCache\DynamoDbCache
+
+  rikudou.dynamo_cache.adapter:
+    class: Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter
+    arguments:
+      - '@rikudou.dynamo_cache.cache'
