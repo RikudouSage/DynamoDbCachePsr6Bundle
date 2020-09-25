@@ -17,11 +17,18 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan": "^0.12.44"
+    "phpstan/phpstan": "^0.12.44",
+    "phpunit/phpunit": "^9.3"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rikudou\\Tests\\DynamoDbCacheBundle\\": "tests/"
+    }
   },
   "scripts": {
     "fixer": "php-cs-fixer fix src --verbose",
     "phpstan": "phpstan analyse --level max src",
-    "test": "composer fixer -- --dry-run && composer phpstan"
+    "phpunit": "phpunit",
+    "test": "composer fixer -- --dry-run && composer phpstan && composer phpunit"
   }
 }

@@ -31,9 +31,11 @@ final class CacheItemConverter implements CacheItemConverterInterface
                 $expiry = new DateTime();
                 $expiry->setTimestamp($value);
             }
+            // @codeCoverageIgnoreStart
         } catch (ReflectionException $e) {
             $expiry = null;
         }
+        // @codeCoverageIgnoreEnd
 
         return new DynamoCacheItem(
             $cacheItem->getKey(),
@@ -49,14 +51,17 @@ final class CacheItemConverter implements CacheItemConverterInterface
         $item = new CacheItem();
 
         $keyReflection = new ReflectionProperty(CacheItem::class, 'key');
+        $isHitReflection = new ReflectionProperty(CacheItem::class, 'isHit');
         $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
         $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
 
         $keyReflection->setAccessible(true);
+        $isHitReflection->setAccessible(true);
         $valueReflection->setAccessible(true);
         $expiryReflection->setAccessible(true);
 
         $keyReflection->setValue($item, $dynamoCacheItem->getKey());
+        $isHitReflection->setValue($item, $dynamoCacheItem->isHit());
         $valueReflection->setValue($item, $dynamoCacheItem->get());
         $expiryReflection->setValue(
             $item,

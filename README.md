@@ -1,4 +1,5 @@
 [![Tests](https://github.com/RikudouSage/DynamoDbCachePsr6Bundle/workflows/Tests/badge.svg)](https://github.com/RikudouSage/DynamoDbCachePsr6Bundle/actions?query=workflow%3ATests)
+[![Coverage Status](https://coveralls.io/repos/github/RikudouSage/DynamoDbCachePsr6Bundle/badge.svg?branch=master)](https://coveralls.io/github/RikudouSage/DynamoDbCachePsr6Bundle?branch=master)
 
 Don't use Symfony? Use the [standalone library](https://github.com/RikudouSage/DynamoDbCachePsr6).
 
