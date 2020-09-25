@@ -9,6 +9,7 @@ services:
     class: Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter
     arguments:
       - '@rikudou.dynamo_cache.cache'
+      - '@rikudou.dynamo_cache.converter.cache_item'
 
   rikudou.dynamo_cache.converter.cache_item:
     class: Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter

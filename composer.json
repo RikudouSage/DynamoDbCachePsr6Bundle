@@ -1,12 +1,12 @@
 {
   "name": "rikudou/psr6-dynamo-db-bundle",
   "type": "symfony-bundle",
-  "description": "PSR-6 cache implementation using AWS DynamoDB for Symfony",
+  "description": "PSR-6 and PSR-16 cache implementation using AWS DynamoDB for Symfony",
   "minimum-stability": "stable",
   "license": "MIT",
   "require": {
     "symfony/framework-bundle": "^5.0",
-    "rikudou/psr6-dynamo-db": "^1.1",
+    "rikudou/psr6-dynamo-db": "^1.2",
     "php": "^7.2",
     "symfony/cache": "^5.0"
   },

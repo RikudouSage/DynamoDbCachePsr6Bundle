@@ -42,4 +42,27 @@ final class CacheItemConverter implements CacheItemConverterInterface
             $expiry
         );
     }
+
+    public function convertToCacheItem(DynamoCacheItem $dynamoCacheItem): CacheItem
+    {
+        $expiry = $dynamoCacheItem->getExpiresAt();
+        $item = new CacheItem();
+
+        $keyReflection = new ReflectionProperty(CacheItem::class, 'key');
+        $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
+        $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
+
+        $keyReflection->setAccessible(true);
+        $valueReflection->setAccessible(true);
+        $expiryReflection->setAccessible(true);
+
+        $keyReflection->setValue($item, $dynamoCacheItem->getKey());
+        $valueReflection->setValue($item, $dynamoCacheItem->get());
+        $expiryReflection->setValue(
+            $item,
+            $expiry ? $expiry->getTimestamp() : null
+        );
+
+        return $item;
+    }
 }

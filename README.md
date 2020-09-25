@@ -19,8 +19,8 @@ Everything else has default values, though you probably want to also configure t
 
 ### Configuration options:
 
-- `replace_default_adapter` - set to `true` to replace the default `AdapterInterface` implementation with the adapter
-from this bundle (default: **false**)
+- `replace_default_adapter` - set to `true` to replace the default `AdapterInterface` and `CacheInterface`
+implementation with the adapter from this bundle (default: **false**)
 - `table` - the table which will be used for storing the cache (**required**)
 - `client_service` - The service that will be used as DynamoDB client, if not set this bundle will try to create one
 (more details in `client_config` option below) but the use is limited
@@ -71,11 +71,16 @@ rikudou_dynamo_db_cache:
 
 You can use one of the two available services:
 
-- `Rikudou\DynamoDbCache\DynamoDbCache` - this one doesn't implement the Symfony `AdapterInterface`
-- `Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter` - this one implements the Symfony `AdapterInterface`
+- `Rikudou\DynamoDbCache\DynamoDbCache` - this one doesn't implement the Symfony `AdapterInterface` nor `CacheInterface`
+- `Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter` - this one implements the Symfony `AdapterInterface` and
+`CacheInterface`
 
-If you set the `replace_default_adapter` to `true` you can also use the
-`Symfony\Component\Cache\Adapter\AdapterInterface` service.
+If you set the `replace_default_adapter` to `true` you can also use these interfaces as services:
+
+- `Symfony\Component\Cache\Adapter\AdapterInterface` - the Symfony interface for PSR-6 cache
+- `Symfony\Contracts\Cache\CacheInterface` - the Symfony interface for simple cache
+- `Psr\Cache\CacheItemPoolInterface` - the PSR-6 interface
+- `Psr\SimpleCache\CacheInterface` - the PSR-16 interface
 
 ### Example
 
@@ -84,19 +89,28 @@ If you set the `replace_default_adapter` to `true` you can also use the
 
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
 use Rikudou\DynamoDbCache\DynamoDbCache;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class MyService
 {
     public function __construct(DynamoDbCache $cache, DynamoDbCacheAdapter $adapter)
     {
-        // it doesn't matter whether you use the adapter or not, the usage is the same, the
+        // it doesn't matter whether you use the adapter or not, the usage for PSR-6 is the same, the
         // only difference is that adapter implements the Symfony interface and thus you can
         // use it to replace the default AdapterInterface implementation
         $item = $cache->getItem('test');
-        $item2 = $cache->getItem('test');
+        $item2 = $adapter->getItem('test');
     
         $item->set('some value');
         $adapter->save($item);
+
+        // or using the CacheInterface api
+        $value = $adapter->get('test', function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return 'new-cache-value';
+        });
+
+        $cache->delete('test');
     }
 }
 ```
@@ -107,6 +121,8 @@ While using the `replace_default_adapter` option:
 <?php
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class MyService
 {
@@ -115,6 +131,40 @@ class MyService
         $item = $cache->getItem('test');
         // do stuff with cache item
         $cache->save($item);
+    }
+}
+
+class MyService2
+{
+    public function __construct(CacheInterface $cache)
+    {
+        $cache->get('test', function (ItemInterface $item) {
+            return 'new-value';
+        });
+    }
+}
+```
+
+Or using the PSR interfaces:
+
+```php
+<?php
+
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
+
+class MyService
+{
+    public function __construct(CacheItemPoolInterface $psr6cache, CacheInterface $psr16cache)
+    {
+        $item = $psr6cache->getItem('test');
+        $value = $item->get();
+        $item->set('newValue');
+        $item->expiresAfter(120);
+        $psr6cache->save($item);
+    
+        $value = $psr16cache->get('test');
+        $psr16cache->set('test', 'newValue', 120);
     }
 }
 ```
