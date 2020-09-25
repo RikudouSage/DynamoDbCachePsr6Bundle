@@ -5,7 +5,6 @@ namespace Rikudou\DynamoDbCacheBundle\Cache;
 use Psr\Cache\CacheItemInterface;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\DynamoDbCache;
-use Rikudou\DynamoDbCache\Exception\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 
@@ -62,15 +61,12 @@ final class DynamoDbCacheAdapter implements AdapterInterface
     }
 
     /**
-     * @param DynamoCacheItem $item
-     *
-     * @throws InvalidArgumentException
+     * @param CacheItemInterface $item
      *
      * @return bool
      */
     public function save(CacheItemInterface $item)
     {
-        /** @var DynamoCacheItem $item */
         return $this->cache->save($item);
     }
 
