@@ -1,8 +1,19 @@
 services:
   rikudou.dynamo_cache.cache: # arguments defined in extension
     class: Rikudou\DynamoDbCache\DynamoDbCache
+    arguments:
+      $clock: ~
+      $converter: '@rikudou.dynamo_cache.converter_registry'
 
   rikudou.dynamo_cache.adapter:
     class: Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter
     arguments:
       - '@rikudou.dynamo_cache.cache'
+
+  rikudou.dynamo_cache.converter.cache_item:
+    class: Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter
+    tags:
+      - rikudou.dynamo_cache.converter
+
+  rikudou.dynamo_cache.converter_registry:
+    class: Rikudou\DynamoDbCache\Converter\CacheItemConverterRegistry
