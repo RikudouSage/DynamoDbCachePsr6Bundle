@@ -8,6 +8,9 @@ use Rikudou\DynamoDbCacheBundle\DependencyInjection\Compiler\SetDefaultAdapterCo
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class RikudouDynamoDbCacheBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
