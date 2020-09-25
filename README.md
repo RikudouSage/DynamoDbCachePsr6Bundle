@@ -118,3 +118,50 @@ class MyService
     }
 }
 ```
+
+## Converters
+
+This bundle supports all instances of `\Psr\Cache\CacheItemInterface` with the use of converters which
+convert the object to `\Rikudou\DynamoDbCache\DynamoCacheItem`. Note that some information may be lost in the
+conversion, notably expiration date.
+
+This bundle has a handler for the default Symfony `\Symfony\Component\Cache\CacheItem` where it retains also the
+information about expiration date.
+
+If you use any other `CacheItemInterface` implementation, you may need to write your custom handler:
+
+```php
+<?php
+
+use Rikudou\DynamoDbCache\Converter\CacheItemConverterInterface;
+use Psr\Cache\CacheItemInterface;
+use Rikudou\DynamoDbCache\DynamoCacheItem;
+
+class MyCacheItemConverter implements CacheItemConverterInterface
+{
+    /**
+     * If this methods returns true, the converter will be used
+     */
+    public function supports(CacheItemInterface $cacheItem): bool
+    {
+        return $cacheItem instanceof MyCacheItem;
+    }
+    
+    public function convert(CacheItemInterface $cacheItem): DynamoCacheItem
+    {
+        assert($cacheItem instanceof MyCacheItem);
+        return new DynamoCacheItem(
+            $cacheItem->getKey(),
+            $cacheItem->isHit(),
+            $cacheItem->get(),
+            $cacheItem->getExpirationDate() // this is a custom method from the hypothetical MyCacheItem
+        );
+    }
+}
+```
+
+Your converter is now automatically registered in the converter system and will be used whenever you try to save
+an instance of `MyCacheItem`.
+
+The default converter which will be used as last option can convert all `CacheItemInterface` objects but has no
+way to get the expiration date since the interface doesn't provide such information.
