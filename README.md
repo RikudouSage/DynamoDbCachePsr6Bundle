@@ -163,5 +163,7 @@ class MyCacheItemConverter implements CacheItemConverterInterface
 Your converter is now automatically registered in the converter system and will be used whenever you try to save
 an instance of `MyCacheItem`.
 
+> If you don't use autoconfiguration, tag your service with `rikudou.dynamo_cache.converter`
+
 The default converter which will be used as last option can convert all `CacheItemInterface` objects but has no
 way to get the expiration date since the interface doesn't provide such information.
