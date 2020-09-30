@@ -8,7 +8,9 @@ use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use ReflectionProperty;
+use Rikudou\Clock\Clock;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
+use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Symfony\Component\Cache\CacheItem;
 
 abstract class AbstractCacheItemTest extends TestCase
@@ -48,7 +50,7 @@ abstract class AbstractCacheItemTest extends TestCase
         string $value = 'value',
         ?DateTimeInterface $dateTime = null
     ): DynamoCacheItem {
-        return new DynamoCacheItem($key, $isHit, $value, $dateTime);
+        return new DynamoCacheItem($key, $isHit, $value, $dateTime, new Clock(), new SerializeItemEncoder());
     }
 
     protected function getRandomCacheItem(

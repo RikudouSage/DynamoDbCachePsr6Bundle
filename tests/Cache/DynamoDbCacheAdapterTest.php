@@ -6,7 +6,9 @@ use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\Result;
 use ReflectionObject;
+use Rikudou\Clock\Clock;
 use Rikudou\DynamoDbCache\DynamoDbCache;
+use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
 use Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractCacheItemTest;
@@ -59,7 +61,10 @@ final class DynamoDbCacheAdapterTest extends AbstractCacheItemTest
     {
         $this->instance = new DynamoDbCacheAdapter(
             new DynamoDbCache('test', $this->getFakeClient($this->itemPoolDefault)),
-            new CacheItemConverter()
+            new CacheItemConverter(
+                new Clock(),
+                new SerializeItemEncoder()
+            )
         );
     }
 

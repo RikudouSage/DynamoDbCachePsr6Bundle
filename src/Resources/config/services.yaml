@@ -1,9 +1,25 @@
 services:
+  rikudou.clock.default:
+    class: Rikudou\Clock\Clock
+
+  rikudou.dynamo_cache.encoder.serialize:
+    class: Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder
+
+  rikudou.dynamo_cache.encoder.json:
+    class: Rikudou\DynamoDbCache\Encoder\JsonItemEncoder
+    arguments:
+      - '%rikudou.dynamo_cache.json_encoder.encode_flags%'
+      - '%rikudou.dynamo_cache.json_encoder.decode_flags%'
+      - '%rikudou.dynamo_cache.json_encoder.depth%'
+
+  rikudou.dynamo_cache.encoder.default: '@rikudou.dynamo_cache.encoder.serialize' # redefined in extension
+
   rikudou.dynamo_cache.cache: # arguments defined in extension
     class: Rikudou\DynamoDbCache\DynamoDbCache
     arguments:
-      $clock: ~
+      $clock: '@rikudou.clock.default'
       $converter: '@rikudou.dynamo_cache.converter_registry'
+      $encoder: '@rikudou.dynamo_cache.encoder.default'
 
   rikudou.dynamo_cache.adapter:
     class: Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter
@@ -13,6 +29,9 @@ services:
 
   rikudou.dynamo_cache.converter.cache_item:
     class: Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter
+    arguments:
+      - '@rikudou.clock.default'
+      - '@rikudou.dynamo_cache.encoder.default'
     tags:
       - rikudou.dynamo_cache.converter
 

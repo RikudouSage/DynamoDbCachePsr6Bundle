@@ -3,6 +3,8 @@
 namespace Rikudou\Tests\DynamoDbCacheBundle\Converter;
 
 use DateTime;
+use Rikudou\Clock\Clock;
+use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractCacheItemTest;
 
@@ -15,7 +17,10 @@ final class CacheItemConverterTest extends AbstractCacheItemTest
 
     protected function setUp(): void
     {
-        $this->instance = new CacheItemConverter();
+        $this->instance = new CacheItemConverter(
+            new Clock(),
+            new SerializeItemEncoder()
+        );
     }
 
     public function testSupports()
