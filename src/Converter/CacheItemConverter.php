@@ -6,12 +6,30 @@ use DateTime;
 use Psr\Cache\CacheItemInterface;
 use ReflectionException;
 use ReflectionProperty;
+use Rikudou\Clock\ClockInterface;
 use Rikudou\DynamoDbCache\Converter\CacheItemConverterInterface;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
+use Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface;
 use Symfony\Component\Cache\CacheItem;
 
 final class CacheItemConverter implements CacheItemConverterInterface
 {
+    /**
+     * @var ClockInterface
+     */
+    private $clock;
+
+    /**
+     * @var CacheItemEncoderInterface
+     */
+    private $encoder;
+
+    public function __construct(ClockInterface $clock, CacheItemEncoderInterface $encoder)
+    {
+        $this->clock = $clock;
+        $this->encoder = $encoder;
+    }
+
     public function supports(CacheItemInterface $cacheItem): bool
     {
         return $cacheItem instanceof CacheItem;
@@ -41,7 +59,9 @@ final class CacheItemConverter implements CacheItemConverterInterface
             $cacheItem->getKey(),
             $cacheItem->isHit(),
             $cacheItem->get(),
-            $expiry
+            $expiry,
+            $this->clock,
+            $this->encoder
         );
     }
 

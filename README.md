@@ -30,6 +30,15 @@ two subkeys:
     - `region` - the AWS region (default: **us-east-1**)
     - `version` - the service version (default: **latest**)
     - no other options are available, if you need to configure more, please create and assign custom `client_service`
+- `encoder` - contains the settings for encoders:
+    - `service` - the service which will be used as the encoder
+        - can be one of built-in services (`rikudou.dynamo_cache.encoder.serialize`, `rikudou.dynamo_cache.encoder.json`)
+        - can be a custom service implementing the `\Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface` interface
+        - default value: **rikudou.dynamo_cache.encoder.serialize**
+    - `json_options` - settings for the json encoder, ignored if another encoder is used
+        - `encode_flags` - the same flags you would pass to `json_encode()`
+        - `decode_flags` - the same flags you would pass to `json_decode()`
+        - `depth` - the depth argument for both `json_encode()` and `json_decode()`
 - `primary_key_field` - the name of the field that will be used as the primary key (default: **id**)
 - `ttl_field` - the name of the field that will be used as the ttl field (default: **ttl**)
 - `value_field` - the name of the field that will be used as the value field (default: **value**)
@@ -57,6 +66,22 @@ rikudou_dynamo_db_cache:
 
         # The service version
         version:              latest
+    encoder:
+
+        # The service to be used as the encoder/decoder
+        service:              rikudou.dynamo_cache.encoder.serialize
+
+        # Settings for the json encoder
+        json_options:
+
+            # The flags that will be passed when encoding
+            encode_flags:         0
+
+            # The flags that will be passed when decoding
+            decode_flags:         0
+
+            # The depth of the JSON parsing for encoding/decoding
+            depth:                512
 
     # The field to be used as primary key
     primary_key_field:    id

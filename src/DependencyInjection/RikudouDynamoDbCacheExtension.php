@@ -28,7 +28,8 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $configs = $this->processConfiguration(new Configuration(), $configs);
         $clientService = $this->createDynamoClient($container, $configs);
         $this->createCacheClient($container, $configs, $clientService);
-        $container->setParameter('rikudou.dynamo_cache.internal.replace_adapter', $configs['replace_default_adapter']);
+        $this->createDefaultEncoder($container, $configs);
+        $this->createParameters($container, $configs);
     }
 
     /**
@@ -64,5 +65,40 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $definition->addArgument($configs['primary_key_field']);
         $definition->addArgument($configs['ttl_field']);
         $definition->addArgument($configs['value_field']);
+    }
+
+    /**
+     * @param ContainerBuilder     $container
+     * @param array<string, mixed> $configs
+     */
+    private function createDefaultEncoder(ContainerBuilder $container, array $configs): void
+    {
+        $container->removeDefinition('rikudou.dynamo_cache.encoder.default');
+        $container->setAlias('rikudou.dynamo_cache.encoder.default', $configs['encoder']['service']);
+    }
+
+    /**
+     * @param ContainerBuilder     $container
+     * @param array<string, mixed> $configs
+     */
+    private function createParameters(ContainerBuilder $container, array $configs): void
+    {
+        $container->setParameter(
+            'rikudou.dynamo_cache.internal.replace_adapter',
+            $configs['replace_default_adapter']
+        );
+
+        $container->setParameter(
+            'rikudou.dynamo_cache.json_encoder.encode_flags',
+            $configs['encoder']['json_options']['encode_flags']
+        );
+        $container->setParameter(
+            'rikudou.dynamo_cache.json_encoder.decode_flags',
+            $configs['encoder']['json_options']['decode_flags']
+        );
+        $container->setParameter(
+            'rikudou.dynamo_cache.json_encoder.depth',
+            $configs['encoder']['json_options']['depth']
+        );
     }
 }
