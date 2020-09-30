@@ -57,6 +57,22 @@ rikudou_dynamo_db_cache:
 
         # The service version
         version:              latest
+    encoder:
+
+        # The service to be used as the encoder/decoder
+        service:              rikudou.dynamo_cache.encoder.serialize
+
+        # Settings for the json encoder
+        json_options:
+
+            # The flags that will be passed when encoding
+            encode_flags:         0
+
+            # The flags that will be passed when decoding
+            decode_flags:         0
+
+            # The depth of the JSON parsing for encoding/decoding
+            depth:                512
 
     # The field to be used as primary key
     primary_key_field:    id

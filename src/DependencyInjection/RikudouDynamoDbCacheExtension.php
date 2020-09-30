@@ -67,13 +67,21 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $definition->addArgument($configs['value_field']);
     }
 
-    private function createDefaultEncoder(ContainerBuilder $container, array $configs)
+    /**
+     * @param ContainerBuilder     $container
+     * @param array<string, mixed> $configs
+     */
+    private function createDefaultEncoder(ContainerBuilder $container, array $configs): void
     {
         $container->removeDefinition('rikudou.dynamo_cache.encoder.default');
         $container->setAlias('rikudou.dynamo_cache.encoder.default', $configs['encoder']['service']);
     }
 
-    private function createParameters(ContainerBuilder $container, array $configs)
+    /**
+     * @param ContainerBuilder     $container
+     * @param array<string, mixed> $configs
+     */
+    private function createParameters(ContainerBuilder $container, array $configs): void
     {
         $container->setParameter(
             'rikudou.dynamo_cache.internal.replace_adapter',
