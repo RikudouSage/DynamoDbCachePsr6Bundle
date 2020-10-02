@@ -26,10 +26,12 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $loader->load('aliases.yaml');
 
         $configs = $this->processConfiguration(new Configuration(), $configs);
+
         $clientService = $this->createDynamoClient($container, $configs);
         $this->createCacheClient($container, $configs, $clientService);
         $this->createDefaultEncoder($container, $configs);
         $this->createParameters($container, $configs);
+        $this->createSessionHandler($container, $configs);
     }
 
     /**
@@ -100,5 +102,16 @@ final class RikudouDynamoDbCacheExtension extends Extension
             'rikudou.dynamo_cache.json_encoder.depth',
             $configs['encoder']['json_options']['depth']
         );
+    }
+
+    /**
+     * @param ContainerBuilder    $container
+     * @param array<string,mixed> $configs
+     */
+    private function createSessionHandler(ContainerBuilder $container, array $configs): void
+    {
+        $definition = $container->getDefinition('rikudou.dynamo_cache.session');
+        $definition->setArgument('$ttl', $configs['session']['ttl']);
+        $definition->setArgument('$prefix', $configs['session']['prefix']);
     }
 }
