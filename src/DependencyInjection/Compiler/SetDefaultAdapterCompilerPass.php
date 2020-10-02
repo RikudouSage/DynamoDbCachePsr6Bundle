@@ -7,6 +7,7 @@ use Psr\SimpleCache\CacheInterface as Psr16CacheInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -22,6 +23,7 @@ final class SetDefaultAdapterCompilerPass implements CompilerPassInterface
             $container->setAlias(CacheInterface::class, 'rikudou.dynamo_cache.adapter');
             $container->setAlias(CacheItemPoolInterface::class, 'rikudou.dynamo_cache.cache');
             $container->setAlias(Psr16CacheInterface::class, 'rikudou.dynamo_cache.cache');
+            $container->setAlias(SessionInterface::class, 'rikudou.dynamo_cache.session');
         }
     }
 }
