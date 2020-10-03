@@ -248,7 +248,7 @@ way to get the expiration date since the interface doesn't provide such informat
 
 This bundle contains a session handler to store your session data in DynamoDB.
 
-To use it you either need to specify the `handler_id` in `framework.yaml` or set `replace_default_adapter`
-to `true` **and** remove `handler_id` from `framework.yaml` (the default configuration created by flex
-specifies `null` explicitly as the `handler_id`, if you want to use the `replace_default_adapter`, remove
-it from the config).
+To use it you either need to specify the `handler_id` in `framework.yaml` to `rikudou.dynamo_cache.session`
+or set `replace_default_adapter` to `true` **and** remove `handler_id` from `framework.yaml`
+(the default configuration created by flex specifies `null` explicitly as the `handler_id`, if you want to use the
+`replace_default_adapter`, remove it from the config).
