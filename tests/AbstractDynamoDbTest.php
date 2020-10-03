@@ -6,7 +6,6 @@ use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\Result;
 use ReflectionObject;
-use Rikudou\Tests\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapterTest;
 
 abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
 {
@@ -71,7 +70,7 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
                 string $ttlField,
                 string $valueField,
                 string $awsErrorCode,
-                DynamoDbCacheAdapterTest $parent
+                AbstractDynamoDbTest $parent
             ) {
                 $this->pool = $pool;
                 $this->idField = $idField;
@@ -83,13 +82,22 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
 
             public function getItem(array $args = [], bool $raw = false)
             {
-                $availableIds = array_column(array_column($this->pool, $this->idField), 'S');
+                $reflection = new ReflectionObject($this->parent);
+                $pool = $reflection->getProperty('itemPoolSaved');
+                $pool->setAccessible(true);
+                $savePool = $pool->getValue($this->parent);
+
+                $availableIds = array_merge(
+                    array_column(array_column($this->pool, $this->idField), 'S'),
+                    array_column(array_column($savePool, $this->idField), 'S')
+                );
+
                 $id = $args['Key'][$this->idField]['S'];
                 if (!in_array($id, $availableIds, true)) {
                     throw $this->getException();
                 }
 
-                $data = array_filter($this->pool, function ($item) use ($id) {
+                $data = array_filter(array_merge($this->pool, $savePool), function ($item) use ($id) {
                     return $item[$this->idField]['S'] === $id;
                 });
 
@@ -150,6 +158,20 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
                         ],
                     ],
                 ]);
+
+                $reflection = new ReflectionObject($this->parent);
+                $pool = $reflection->getProperty('itemPoolSaved');
+                $pool->setAccessible(true);
+
+                $currentPool = $pool->getValue($this->parent);
+
+                foreach ($currentPool as $index => $item) {
+                    if ($item[$this->idField]['S'] === $key) {
+                        unset($currentPool[$index]);
+                    }
+                }
+
+                $pool->setValue($this->parent, $currentPool);
             }
 
             public function batchWriteItem(array $args = [])
