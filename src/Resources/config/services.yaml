@@ -37,3 +37,8 @@ services:
 
   rikudou.dynamo_cache.converter_registry:
     class: Rikudou\DynamoDbCache\Converter\CacheItemConverterRegistry
+
+  rikudou.dynamo_cache.session:
+    class: Rikudou\DynamoDbCacheBundle\Session\DynamoDbSessionHandler
+    arguments:
+      - '@rikudou.dynamo_cache.adapter'

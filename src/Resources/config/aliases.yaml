@@ -2,3 +2,4 @@ services:
   Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter: '@rikudou.dynamo_cache.adapter'
   Rikudou\DynamoDbCache\DynamoDbCache: '@rikudou.dynamo_cache.cache'
   Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface: '@rikudou.dynamo_cache.encoder.default'
+  Rikudou\DynamoDbCacheBundle\Session\DynamoDbSessionHandler: '@rikudou.dynamo_cache.session'
