@@ -7,13 +7,14 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @codeCoverageIgnore
  */
-final class RikudouDynamoDbCacheExtension extends Extension
+final class RikudouDynamoDbCacheExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @param array<string, mixed> $configs
@@ -34,9 +35,23 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $this->createSessionHandler($container, $configs);
     }
 
+    public function prepend(ContainerBuilder $container): void
+    {
+        $configs = $this->processConfiguration(new Configuration(), $container->getExtensionConfig($this->getAlias()));
+        if ($configs['replace_default_adapter']) {
+            $container->prependExtensionConfig('framework', [
+                'session' => [
+                    'handler_id' => 'rikudou.dynamo_cache.session',
+                ],
+            ]);
+        }
+    }
+
     /**
-     * @param array<string, mixed> $configs
      * @param ContainerBuilder     $container
+     * @param array<string, mixed> $configs
+     *
+     * @return string
      */
     private function createDynamoClient(ContainerBuilder $container, array $configs): string
     {
