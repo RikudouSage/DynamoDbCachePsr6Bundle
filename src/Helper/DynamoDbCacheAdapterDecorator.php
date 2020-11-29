@@ -3,6 +3,7 @@
 namespace Rikudou\DynamoDbCacheBundle\Helper;
 
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
 use Rikudou\DynamoDbCache\Exception\InvalidArgumentException;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
 use Symfony\Component\Cache\CacheItem;
@@ -118,5 +119,34 @@ trait DynamoDbCacheAdapterDecorator
     public function commit()
     {
         return $this->originalAdapter->commit();
+    }
+
+    /**
+     * @param string     $key
+     * @param callable   $callback
+     * @param float|null $beta
+     * @param array|null $metadata
+     * @codeCoverageIgnore
+     *
+     * @throws PsrInvalidArgumentException
+     *
+     * @return mixed
+     */
+    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null)
+    {
+        return $this->originalAdapter->get($key, $callback, $beta, $metadata);
+    }
+
+    /**
+     * @param string $key
+     * @codeCoverageIgnore
+     *
+     * @throws PsrInvalidArgumentException
+     *
+     * @return bool
+     */
+    public function delete(string $key): bool
+    {
+        return $this->originalAdapter->delete($key);
     }
 }
