@@ -97,6 +97,10 @@ final class Configuration implements ConfigurationInterface
                     ->info('The field to be used as value')
                     ->defaultValue('value')
                 ->end()
+                ->scalarNode('key_prefix')
+                    ->info('The prefix used in front of keys when storing')
+                    ->defaultNull()
+                ->end()
             ->end();
 
         return $treeBuilder;

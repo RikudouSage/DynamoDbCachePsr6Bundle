@@ -69,6 +69,7 @@ final class RikudouDynamoDbCacheExtension extends Extension
         $definition->addArgument($configs['primary_key_field']);
         $definition->addArgument($configs['ttl_field']);
         $definition->addArgument($configs['value_field']);
+        $definition->setArgument('$prefix', $configs['key_prefix']);
     }
 
     /**
