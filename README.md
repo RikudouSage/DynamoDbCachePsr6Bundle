@@ -28,7 +28,6 @@ implementation with the adapter from this bundle (default: **false**)
 - `client_config` - If no `client_service` is configured, it will be created from the values of this config. It contains
 two subkeys:
     - `region` - the AWS region (default: **us-east-1**)
-    - `version` - the service version (default: **latest**)
     - no other options are available, if you need to configure more, please create and assign custom `client_service`
 - `encoder` - contains the settings for encoders:
     - `service` - the service which will be used as the encoder
@@ -65,8 +64,6 @@ rikudou_dynamo_db_cache:
         # The AWS region
         region:               us-east-1
 
-        # The service version
-        version:              latest
     encoder:
 
         # The service to be used as the encoder/decoder

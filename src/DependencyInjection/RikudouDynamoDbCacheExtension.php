@@ -2,7 +2,7 @@
 
 namespace Rikudou\DynamoDbCacheBundle\DependencyInjection;
 
-use Aws\DynamoDb\DynamoDbClient;
+use AsyncAws\DynamoDb\DynamoDbClient;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -48,7 +48,6 @@ final class RikudouDynamoDbCacheExtension extends Extension
             $service = new Definition(DynamoDbClient::class);
             $service->addArgument([
                 'region' => $configs['client_config']['region'],
-                'version' => $configs['client_config']['version'],
             ]);
             $client = 'rikudou.dynamo_cache.internal.dynamo_client';
             $container->setDefinition($client, $service);

@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 final class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('rikudou_dynamo_db_cache');
 
@@ -37,10 +37,6 @@ final class Configuration implements ConfigurationInterface
                         ->scalarNode('region')
                             ->info('The AWS region')
                             ->defaultValue('us-east-1')
-                        ->end()
-                        ->scalarNode('version')
-                            ->info('The service version')
-                            ->defaultValue('latest')
                         ->end()
                     ->end()
                 ->end()

@@ -28,7 +28,7 @@ services:
       - '@rikudou.dynamo_cache.converter.cache_item'
 
   rikudou.dynamo_cache.converter.cache_item:
-    class: Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter
+    class: Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter
     arguments:
       - '@rikudou.clock.default'
       - '@rikudou.dynamo_cache.encoder.default'
