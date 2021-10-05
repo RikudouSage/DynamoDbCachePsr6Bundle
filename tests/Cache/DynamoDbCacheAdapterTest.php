@@ -6,7 +6,7 @@ use Rikudou\Clock\Clock;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
-use Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter;
+use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractDynamoDbTest;
 use stdClass;
 use Symfony\Component\Cache\CacheItem;
@@ -22,7 +22,7 @@ final class DynamoDbCacheAdapterTest extends AbstractDynamoDbTest
     {
         $this->instance = new DynamoDbCacheAdapter(
             new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
-            new CacheItemConverter(
+            new SymfonyCacheItemConverter(
                 new Clock(),
                 new SerializeItemEncoder()
             )
@@ -105,7 +105,7 @@ final class DynamoDbCacheAdapterTest extends AbstractDynamoDbTest
             'test456',
         ]));
 
-        self::assertFalse($this->instance->deleteItems([
+        self::assertTrue($this->instance->deleteItems([
             'test852',
         ]));
     }

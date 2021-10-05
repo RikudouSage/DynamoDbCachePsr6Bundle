@@ -7,7 +7,7 @@ use Rikudou\Clock\Clock;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
-use Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter;
+use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
 use Rikudou\DynamoDbCacheBundle\Helper\DynamoDbCacheAdapterDecorator;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractDynamoDbTest;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -31,7 +31,7 @@ class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
     {
         $this->originalInstance = new DynamoDbCacheAdapter(
             new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
-            new CacheItemConverter(
+            new SymfonyCacheItemConverter(
                 new Clock(),
                 new SerializeItemEncoder()
             )

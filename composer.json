@@ -6,9 +6,10 @@
   "license": "MIT",
   "require": {
     "symfony/framework-bundle": "^5.0",
-    "rikudou/psr6-dynamo-db": "^1.4",
+    "rikudou/psr6-dynamo-db": "^2.0",
     "php": "^7.2 | ^8.0",
-    "symfony/cache": "^5.0"
+    "symfony/cache": "^5.0",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {

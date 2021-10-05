@@ -12,7 +12,7 @@ use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface;
 use Symfony\Component\Cache\CacheItem;
 
-final class CacheItemConverter implements CacheItemConverterInterface
+final class SymfonyCacheItemConverter implements CacheItemConverterInterface
 {
     /**
      * @var ClockInterface

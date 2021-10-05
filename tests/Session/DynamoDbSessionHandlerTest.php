@@ -8,7 +8,7 @@ use Rikudou\DynamoDbCache\Converter\CacheItemConverterRegistry;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
-use Rikudou\DynamoDbCacheBundle\Converter\CacheItemConverter;
+use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
 use Rikudou\DynamoDbCacheBundle\Session\DynamoDbSessionHandler;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractDynamoDbTest;
 
@@ -45,13 +45,13 @@ final class DynamoDbSessionHandlerTest extends AbstractDynamoDbTest
                     'value',
                     new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                     new CacheItemConverterRegistry(
-                        new CacheItemConverter(
+                        new SymfonyCacheItemConverter(
                             new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                             new SerializeItemEncoder()
                         )
                     )
                 ),
-                new CacheItemConverter(
+                new SymfonyCacheItemConverter(
                     new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                     new SerializeItemEncoder()
                 )
