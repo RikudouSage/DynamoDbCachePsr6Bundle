@@ -3,6 +3,9 @@
 
 Don't use Symfony? Use the [standalone library](https://github.com/RikudouSage/DynamoDbCachePsr6).
 
+> Since version 2 this library uses the lightweight [async-aws/dynamo-db](https://github.com/async-aws/dynamo-db)
+> instead of the full AWS SDK.
+
 ## Installation
 
 `composer require rikudou/psr6-dynamo-db-bundle`
