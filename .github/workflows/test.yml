@@ -49,7 +49,7 @@ jobs:
       - name: Run tests
         run: composer phpunit
   tests_4x:
-    name: Tests (5.x)
+    name: Tests (4.x)
     runs-on: ubuntu-latest
     steps:
       - name: Setup PHP
