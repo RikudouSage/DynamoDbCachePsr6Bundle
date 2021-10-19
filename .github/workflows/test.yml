@@ -34,9 +34,12 @@ jobs:
         run: composer install
       - name: Run static analysis
         run: composer phpstan
-  tests_5x:
-    name: Tests (5.x)
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        symfonyVersion: [^4.4, ^5.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -46,22 +49,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Dependencies
         run: composer install
-      - name: Run tests
-        run: composer phpunit
-  tests_4x:
-    name: Tests (4.x)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: composer install
-      - name: Install Symfony 4
-        run: composer require symfony/framework-bundle:^4.4 symfony/cache:^4.4
+      - name: Install Symfony
+        run: composer require symfony/framework-bundle:${{ matrix.symfonyVersion }} symfony/cache:${{ matrix.symfonyVersion }}
       - name: Run tests
         run: composer phpunit
   coverage:
