@@ -60,11 +60,20 @@ final class DynamoDbSessionHandler extends AbstractSessionHandler
         return $this->cache->save($item);
     }
 
+    /**
+     * @param string $sessionId
+     */
     protected function doRead($sessionId): string
     {
         return (string) $this->getCacheItem($sessionId)->get();
     }
 
+    /**
+     * @param string $sessionId
+     * @param string $data
+     *
+     * @throws InvalidArgumentException
+     */
     protected function doWrite($sessionId, $data): bool
     {
         $item = $this->getCacheItem($sessionId);
@@ -74,6 +83,11 @@ final class DynamoDbSessionHandler extends AbstractSessionHandler
         return $this->cache->save($item);
     }
 
+    /**
+     * @param string $sessionId
+     *
+     * @throws InvalidArgumentException
+     */
     protected function doDestroy($sessionId): bool
     {
         return $this->cache->deleteItem($this->getCacheKey($sessionId));
