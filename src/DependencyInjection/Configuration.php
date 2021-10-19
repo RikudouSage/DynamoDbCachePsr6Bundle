@@ -71,7 +71,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Session related configuration')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->integerNode('ttl')
+                        ->scalarNode('ttl')
                             ->info('The ttl for the session, defaults to ini setting session.gc_maxlifetime')
                             ->defaultNull()
                         ->end()
