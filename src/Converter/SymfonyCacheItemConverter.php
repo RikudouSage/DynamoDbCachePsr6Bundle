@@ -47,7 +47,7 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
                 $expiry = null;
             } else {
                 $expiry = new DateTime();
-                $expiry->setTimestamp($value);
+                $expiry->setTimestamp((int) $value);
             }
             // @codeCoverageIgnoreStart
         } catch (ReflectionException $e) {
