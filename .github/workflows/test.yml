@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [ ^4.4, ^5.0 ]
+        symfonyVersion: [ ^4.4, ^5.0, ^6.0 ]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [^4.4, ^5.0]
+        symfonyVersion: [^4.4, ^5.0, ^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
