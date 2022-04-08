@@ -14,20 +14,10 @@ use Symfony\Component\Cache\CacheItem;
 
 final class SymfonyCacheItemConverter implements CacheItemConverterInterface
 {
-    /**
-     * @var ClockInterface
-     */
-    private $clock;
-
-    /**
-     * @var CacheItemEncoderInterface
-     */
-    private $encoder;
-
-    public function __construct(ClockInterface $clock, CacheItemEncoderInterface $encoder)
-    {
-        $this->clock = $clock;
-        $this->encoder = $encoder;
+    public function __construct(
+        private ClockInterface $clock,
+        private CacheItemEncoderInterface $encoder,
+    ) {
     }
 
     public function supports(CacheItemInterface $cacheItem): bool
@@ -43,6 +33,8 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
             $reflectionExpiry = new ReflectionProperty(CacheItem::class, 'expiry');
             $reflectionExpiry->setAccessible(true);
             $value = $reflectionExpiry->getValue($cacheItem);
+            assert(is_scalar($value) || $value === null);
+
             if ($value === null) {
                 $expiry = null;
             } else {
@@ -85,7 +77,7 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
         $valueReflection->setValue($item, $dynamoCacheItem->get());
         $expiryReflection->setValue(
             $item,
-            $expiry ? $expiry->getTimestamp() : null
+            $expiry?->getTimestamp()
         );
 
         return $item;

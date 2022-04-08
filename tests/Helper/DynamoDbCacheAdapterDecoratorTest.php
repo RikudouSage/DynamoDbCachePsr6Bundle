@@ -17,15 +17,9 @@ use Symfony\Contracts\Cache\CallbackInterface;
 
 class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
 {
-    /**
-     * @var DynamoDbCacheAdapter
-     */
-    private $originalInstance;
+    private DynamoDbCacheAdapter $originalInstance;
 
-    /**
-     * @var AdapterInterface|CacheInterface
-     */
-    private $instance;
+    private AdapterInterface|CacheInterface $instance;
 
     protected function setUp(): void
     {

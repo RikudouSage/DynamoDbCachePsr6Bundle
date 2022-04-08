@@ -13,7 +13,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -25,12 +25,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [ ^4.4, ^5.0 ]
+        symfonyVersion: [^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -44,12 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [^4.4, ^5.0]
+        symfonyVersion: [^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -65,7 +65,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies

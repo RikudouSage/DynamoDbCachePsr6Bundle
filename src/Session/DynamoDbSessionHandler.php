@@ -10,27 +10,15 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHand
 final class DynamoDbSessionHandler extends AbstractSessionHandler
 {
     /**
-     * @var DynamoDbCacheAdapter
-     */
-    private $cache;
-
-    /**
-     * @var string
-     */
-    private $prefix;
-
-    /**
      * @var int
      */
-    private $ttl;
+    private int $ttl;
 
     public function __construct(
-        DynamoDbCacheAdapter $cache,
-        string $prefix,
+        private DynamoDbCacheAdapter $cache,
+        private string $prefix,
         ?int $ttl
     ) {
-        $this->cache = $cache;
-        $this->prefix = $prefix;
         $this->ttl = $ttl ?? (int) ini_get('session.gc_maxlifetime');
     }
 
@@ -39,42 +27,34 @@ final class DynamoDbSessionHandler extends AbstractSessionHandler
         return true;
     }
 
-    public function gc($maxlifetime): bool
+    public function gc(int $max_lifetime): int|false
     {
-        return true;
+        return 0;
     }
 
     /**
-     * @param string $key
-     * @param string $val
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function updateTimestamp($key, $val): bool
+    public function updateTimestamp(string $id, string $data): bool
     {
-        $item = $this->getCacheItem($key);
+        $item = $this->getCacheItem($id);
         $item->expiresAfter($this->ttl);
 
         return $this->cache->save($item);
     }
 
-    /**
-     * @param string $sessionId
-     */
-    protected function doRead($sessionId): string
+    protected function doRead(string $sessionId): string
     {
-        return (string) $this->getCacheItem($sessionId)->get();
+        $result = $this->getCacheItem($sessionId)->get();
+        assert(is_scalar($result) || $result === null);
+
+        return (string) $result;
     }
 
     /**
-     * @param string $sessionId
-     * @param string $data
-     *
      * @throws InvalidArgumentException
      */
-    protected function doWrite($sessionId, $data): bool
+    protected function doWrite(string $sessionId, string $data): bool
     {
         $item = $this->getCacheItem($sessionId);
         $item->set($data);
@@ -84,11 +64,9 @@ final class DynamoDbSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * @param string $sessionId
-     *
      * @throws InvalidArgumentException
      */
-    protected function doDestroy($sessionId): bool
+    protected function doDestroy(string $sessionId): bool
     {
         return $this->cache->deleteItem($this->getCacheKey($sessionId));
     }
@@ -98,6 +76,9 @@ final class DynamoDbSessionHandler extends AbstractSessionHandler
         return $this->prefix . $sessionId;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function getCacheItem(string $sessionId): CacheItem
     {
         return $this->cache->getItem($this->getCacheKey($sessionId));

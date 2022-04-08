@@ -5,10 +5,10 @@
   "minimum-stability": "stable",
   "license": "MIT",
   "require": {
-    "symfony/framework-bundle": "^4.4 | ^5.0",
+    "symfony/framework-bundle": "^6.0",
     "rikudou/psr6-dynamo-db": "^2.0",
-    "php": "^7.2 | ^8.0",
-    "symfony/cache": "^4.4 | ^5.0",
+    "php": "^8.0",
+    "symfony/cache": "^6.0",
     "ext-json": "*"
   },
   "autoload": {
@@ -17,9 +17,9 @@
     }
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan": "^0.12.44",
-    "phpunit/phpunit": "^9.3"
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpstan/phpstan": "^1.5",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload-dev": {
     "psr-4": {

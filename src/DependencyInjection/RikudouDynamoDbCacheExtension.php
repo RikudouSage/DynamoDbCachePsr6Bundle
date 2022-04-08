@@ -44,7 +44,10 @@ final class RikudouDynamoDbCacheExtension extends Extension
     {
         if ($configs['client_service']) {
             $client = $configs['client_service'];
+            assert(is_string($client));
         } else {
+            assert(is_array($configs['client_config']));
+
             $service = new Definition(DynamoDbClient::class);
             $service->addArgument([
                 'region' => $configs['client_config']['region'],
@@ -77,6 +80,8 @@ final class RikudouDynamoDbCacheExtension extends Extension
      */
     private function createDefaultEncoder(ContainerBuilder $container, array $configs): void
     {
+        assert(is_array($configs['encoder']));
+
         $container->removeDefinition('rikudou.dynamo_cache.encoder.default');
         $container->setAlias('rikudou.dynamo_cache.encoder.default', $configs['encoder']['service']);
     }
@@ -87,10 +92,18 @@ final class RikudouDynamoDbCacheExtension extends Extension
      */
     private function createParameters(ContainerBuilder $container, array $configs): void
     {
+        assert(
+            is_array($configs['replace_default_adapter'])
+            || is_scalar($configs['replace_default_adapter'])
+            || $configs['replace_default_adapter'] === null
+        );
+
         $container->setParameter(
             'rikudou.dynamo_cache.internal.replace_adapter',
             $configs['replace_default_adapter']
         );
+
+        assert(is_array($configs['encoder']));
 
         $container->setParameter(
             'rikudou.dynamo_cache.json_encoder.encode_flags',
@@ -112,6 +125,8 @@ final class RikudouDynamoDbCacheExtension extends Extension
      */
     private function createSessionHandler(ContainerBuilder $container, array $configs): void
     {
+        assert(is_array($configs['session']));
+
         $definition = $container->getDefinition('rikudou.dynamo_cache.session');
         $definition->setArgument('$ttl', $configs['session']['ttl']);
         $definition->setArgument('$prefix', $configs['session']['prefix']);
