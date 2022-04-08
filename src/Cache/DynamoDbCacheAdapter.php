@@ -17,23 +17,13 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
     use CacheTrait;
 
     /**
-     * @var DynamoDbCache
-     */
-    private $cache;
-
-    /**
-     * @var SymfonyCacheItemConverter
-     */
-    private $converter;
-
-    /**
      * @param DynamoDbCache             $cache
      * @param SymfonyCacheItemConverter $converter
      */
-    public function __construct(DynamoDbCache $cache, SymfonyCacheItemConverter $converter)
-    {
-        $this->cache = $cache;
-        $this->converter = $converter;
+    public function __construct(
+        private DynamoDbCache $cache,
+        private SymfonyCacheItemConverter $converter
+    ) {
     }
 
     /**
@@ -43,7 +33,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return CacheItem
      */
-    public function getItem($key)
+    public function getItem($key): CacheItem
     {
         return $this->converter->convertToCacheItem($this->cache->getItem($key));
     }

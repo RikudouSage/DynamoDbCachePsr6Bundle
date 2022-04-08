@@ -13,7 +13,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -25,25 +25,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [ ^4.4, ^5.0, ^6.0 ]
-        include:
-          - symfonyVersion: ^6.0
-            phpVersion: '8.1'
-          - symfonyVersion: ^4.4
-            phpVersion: '7.4'
-          - symfonyVersion: ^5.0
-            phpVersion: '7.4'
+        symfonyVersion: [^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.phpVersion }}
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Install Symfony
-        run: composer require -W symfony/framework-bundle:${{ matrix.symfonyVersion }} symfony/cache:${{ matrix.symfonyVersion }} symfony/console:${{ matrix.symfonyVersion }}
       - name: Install Dependencies
         run: composer install
+      - name: Install Symfony
+        run: composer require -W symfony/framework-bundle:${{ matrix.symfonyVersion }} symfony/cache:${{ matrix.symfonyVersion }} symfony/console:${{ matrix.symfonyVersion }}
       - name: Run static analysis
         run: composer phpstan
   tests:
@@ -51,12 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfonyVersion: [^4.4, ^5.0, ^6.0]
+        symfonyVersion: [^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -72,7 +65,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
