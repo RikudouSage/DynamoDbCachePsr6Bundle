@@ -26,11 +26,19 @@ jobs:
     strategy:
       matrix:
         symfonyVersion: [ ^4.4, ^5.0, ^6.0 ]
+        include:
+          - symfonyVersion: ^6.0
+            phpVersion: '8.1'
+          - symfonyVersion: ^4.4
+            phpVersion: '7.4'
+          - symfonyVersion: ^5.0
+            phpVersion: '7.4'
+
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.symfonyVersion == '^6.0' ? '8.1' : '7.4' }}"
+          php-version:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
