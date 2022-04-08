@@ -33,12 +33,11 @@ jobs:
             phpVersion: '7.4'
           - symfonyVersion: ^5.0
             phpVersion: '7.4'
-
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version:
+          php-version: ${{ matrix.phpVersion }}
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
