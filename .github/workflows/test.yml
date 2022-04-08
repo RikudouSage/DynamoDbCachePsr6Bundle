@@ -40,10 +40,10 @@ jobs:
           php-version: ${{ matrix.phpVersion }}
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: composer install
       - name: Install Symfony
         run: composer require -W symfony/framework-bundle:${{ matrix.symfonyVersion }} symfony/cache:${{ matrix.symfonyVersion }} symfony/console:${{ matrix.symfonyVersion }}
+      - name: Install Dependencies
+        run: composer install
       - name: Run static analysis
         run: composer phpstan
   tests:
