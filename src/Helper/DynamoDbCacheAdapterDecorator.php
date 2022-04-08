@@ -10,113 +10,78 @@ use Symfony\Component\Cache\CacheItem;
 
 trait DynamoDbCacheAdapterDecorator
 {
-    private $originalAdapter;
-
-    public function __construct(DynamoDbCacheAdapter $originalAdapter)
-    {
-        $this->originalAdapter = $originalAdapter;
+    public function __construct(
+        private DynamoDbCacheAdapter $originalAdapter
+    ) {
     }
 
     /**
-     * @param $key
-     *
      * @throws InvalidArgumentException
-     *
-     * @return CacheItem
      */
-    public function getItem($key)
+    public function getItem(mixed $key): CacheItem
     {
         return $this->originalAdapter->getItem($key);
     }
 
     /**
-     * @param array $keys
-     *
      * @throws InvalidArgumentException
      *
-     * @return CacheItem[]
+     * @return iterable<CacheItem>
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): iterable
     {
         return $this->originalAdapter->getItems($keys);
     }
 
-    /**
-     * @param string $prefix
-     *
-     * @return bool
-     */
-    public function clear(string $prefix = '')
+    public function clear(string $prefix = ''): bool
     {
         return $this->originalAdapter->clear($prefix);
     }
 
     /**
-     * @param $key
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         return $this->originalAdapter->hasItem($key);
     }
 
     /**
-     * @param $key
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function deleteItem($key)
+    public function deleteItem(string $key): bool
     {
         return $this->originalAdapter->deleteItem($key);
     }
 
     /**
-     * @param array $keys
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         return $this->originalAdapter->deleteItems($keys);
     }
 
     /**
-     * @param CacheItemInterface $item
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         return $this->originalAdapter->save($item);
     }
 
     /**
-     * @param CacheItemInterface $item
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         return $this->originalAdapter->saveDeferred($item);
     }
 
     /**
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->originalAdapter->commit();
     }

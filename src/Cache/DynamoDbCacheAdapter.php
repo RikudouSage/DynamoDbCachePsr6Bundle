@@ -33,7 +33,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return CacheItem
      */
-    public function getItem($key): CacheItem
+    public function getItem(mixed $key): CacheItem
     {
         return $this->converter->convertToCacheItem($this->cache->getItem($key));
     }
@@ -45,7 +45,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return CacheItem[]
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): iterable
     {
         return array_map(function (DynamoCacheItem $item) {
             return $this->converter->convertToCacheItem($item);
@@ -57,7 +57,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function clear(string $prefix = '')
+    public function clear(string $prefix = ''): bool
     {
         return $this->cache->clear();
     }
@@ -69,7 +69,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         return $this->cache->hasItem($key);
     }
@@ -81,7 +81,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function deleteItem($key)
+    public function deleteItem(string $key): bool
     {
         return $this->cache->deleteItem($key);
     }
@@ -93,7 +93,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         return $this->cache->deleteItems($keys);
     }
@@ -105,7 +105,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         return $this->cache->save($item);
     }
@@ -117,7 +117,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         return $this->cache->saveDeferred($item);
     }
@@ -127,7 +127,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      *
      * @return bool
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->cache->commit();
     }

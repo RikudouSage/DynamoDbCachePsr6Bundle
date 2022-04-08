@@ -43,6 +43,8 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
             $reflectionExpiry = new ReflectionProperty(CacheItem::class, 'expiry');
             $reflectionExpiry->setAccessible(true);
             $value = $reflectionExpiry->getValue($cacheItem);
+            assert(is_scalar($value) || $value === null);
+
             if ($value === null) {
                 $expiry = null;
             } else {
