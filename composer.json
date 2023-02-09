@@ -6,7 +6,7 @@
   "license": "MIT",
   "require": {
     "symfony/framework-bundle": "^6.0",
-    "rikudou/psr6-dynamo-db": "^2.0 | ^3.0",
+    "rikudou/psr6-dynamo-db": "^3.0",
     "php": "^8.0",
     "symfony/cache": "^6.0",
     "ext-json": "*"
