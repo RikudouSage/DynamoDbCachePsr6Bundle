@@ -91,6 +91,7 @@ trait DynamoDbCacheAdapterDecorator
      * @param callable   $callback
      * @param float|null $beta
      * @param array|null $metadata
+     *
      * @codeCoverageIgnore
      *
      * @throws PsrInvalidArgumentException
@@ -104,6 +105,7 @@ trait DynamoDbCacheAdapterDecorator
 
     /**
      * @param string $key
+     *
      * @codeCoverageIgnore
      *
      * @throws PsrInvalidArgumentException
