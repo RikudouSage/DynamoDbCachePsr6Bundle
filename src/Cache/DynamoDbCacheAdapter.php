@@ -35,7 +35,10 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
      */
     public function getItem(mixed $key): CacheItem
     {
-        return $this->converter->convertToCacheItem($this->cache->getItem($key));
+        $item = $this->cache->getItem($key);
+        assert($item instanceof DynamoCacheItem);
+
+        return $this->converter->convertToCacheItem($item);
     }
 
     /**
@@ -49,7 +52,7 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
     {
         return array_map(function (DynamoCacheItem $item) {
             return $this->converter->convertToCacheItem($item);
-        }, $this->cache->getItems($keys));
+        }, [...$this->cache->getItems($keys)]);
     }
 
     /**

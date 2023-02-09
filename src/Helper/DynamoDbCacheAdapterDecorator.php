@@ -98,7 +98,7 @@ trait DynamoDbCacheAdapterDecorator
      *
      * @return mixed
      */
-    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null)
+    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null): mixed
     {
         return $this->originalAdapter->get($key, $callback, $beta, $metadata);
     }

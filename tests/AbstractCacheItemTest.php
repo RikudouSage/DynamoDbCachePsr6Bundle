@@ -60,52 +60,40 @@ abstract class AbstractCacheItemTest extends TestCase
         ?DateTimeInterface $dateTime = null
     ): CacheItemInterface {
         return new class($key, $isHit, $value, $dateTime) implements CacheItemInterface {
-            private $key;
-
-            private $isHit;
-
-            private $value;
-
-            private $dateTime;
-
             public function __construct(
-                string $key = 'test',
-                bool $isHit = true,
-                string $value = 'value',
-                ?DateTimeInterface $dateTime = null
+                private string $key = 'test',
+                private bool $isHit = true,
+                private string $value = 'value',
+                private ?DateTimeInterface $dateTime = null
             ) {
-                $this->key = $key;
-                $this->isHit = $isHit;
-                $this->value = $value;
-                $this->dateTime = $dateTime;
             }
 
-            public function getKey()
+            public function getKey(): string
             {
                 return $this->key;
             }
 
-            public function get()
+            public function get(): string
             {
                 return $this->value;
             }
 
-            public function isHit()
+            public function isHit(): bool
             {
                 return $this->isHit;
             }
 
-            public function set($value)
+            public function set(mixed $value): static
             {
                 return $this;
             }
 
-            public function expiresAt($expiration)
+            public function expiresAt(?DateTimeInterface $expiration): static
             {
                 return $this;
             }
 
-            public function expiresAfter($time)
+            public function expiresAfter(int|\DateInterval|null $time): static
             {
                 return $this;
             }
