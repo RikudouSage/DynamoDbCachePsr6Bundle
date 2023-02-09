@@ -91,19 +91,21 @@ trait DynamoDbCacheAdapterDecorator
      * @param callable   $callback
      * @param float|null $beta
      * @param array|null $metadata
+     *
      * @codeCoverageIgnore
      *
      * @throws PsrInvalidArgumentException
      *
      * @return mixed
      */
-    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null)
+    public function get(string $key, callable $callback, float $beta = null, array &$metadata = null): mixed
     {
         return $this->originalAdapter->get($key, $callback, $beta, $metadata);
     }
 
     /**
      * @param string $key
+     *
      * @codeCoverageIgnore
      *
      * @throws PsrInvalidArgumentException
