@@ -9,6 +9,8 @@ jobs:
   code_style:
     name: Test code style
     runs-on: ubuntu-latest
+    env:
+      PHP_CS_FIXER_IGNORE_ENV: 1
     strategy:
       matrix:
         phpVersion: ['8.0', '8.1', '8.2']
