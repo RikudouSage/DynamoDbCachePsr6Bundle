@@ -9,11 +9,14 @@ jobs:
   code_style:
     name: Test code style
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        phpVersion: ['8.0', '8.1', '8.2']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: ${{ matrix.phpVersion }}
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -25,12 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        phpVersion: ['8.0', '8.1', '8.2']
         symfonyVersion: [^6.0]
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: ${{ matrix.phpVersion }}
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
@@ -45,11 +49,12 @@ jobs:
     strategy:
       matrix:
         symfonyVersion: [^6.0]
+        phpVersion: ['8.0', '8.1', '8.2']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: ${{ matrix.phpVersion }}
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Install Dependencies
