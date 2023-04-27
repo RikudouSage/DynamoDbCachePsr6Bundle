@@ -84,6 +84,12 @@ final class RikudouDynamoDbCacheExtension extends Extension
 
         $container->removeDefinition('rikudou.dynamo_cache.encoder.default');
         $container->setAlias('rikudou.dynamo_cache.encoder.default', $configs['encoder']['service']);
+
+        if ($configs['encoder']['service'] === 'rikudou.dynamo_cache.encoder.base64') {
+            $definition = $container->getDefinition($configs['encoder']['service']);
+            $decoratedService = $configs['encoder']['base64_decorated_service'];
+            $definition->setArgument(0, new Reference($decoratedService));
+        }
     }
 
     /**

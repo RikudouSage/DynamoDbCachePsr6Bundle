@@ -12,6 +12,11 @@ services:
       - '%rikudou.dynamo_cache.json_encoder.decode_flags%'
       - '%rikudou.dynamo_cache.json_encoder.depth%'
 
+  rikudou.dynamo_cache.encoder.base64:
+    class: Rikudou\DynamoDbCache\Encoder\Base64ItemEncoder
+    arguments:
+      - '@rikudou.dynamo_cache.encoder.serialize' # redefined in extension
+
   rikudou.dynamo_cache.encoder.default: '@rikudou.dynamo_cache.encoder.serialize' # redefined in extension
 
   rikudou.dynamo_cache.cache: # arguments defined in extension
