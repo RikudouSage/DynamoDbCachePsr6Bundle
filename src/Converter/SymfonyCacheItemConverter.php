@@ -28,6 +28,7 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
     public function convert(CacheItemInterface $cacheItem): DynamoCacheItem
     {
         assert($cacheItem instanceof CacheItem);
+
         // in a try-catch block in case the internal workings of CacheItem change
         try {
             $reflectionExpiry = new ReflectionProperty(CacheItem::class, 'expiry');
