@@ -208,6 +208,22 @@ class MyService
 }
 ```
 
+or configuring directly a cache pool through the cache config of Symfony:
+
+```yaml
+framework:
+  cache:
+    pools:
+      my_dynamodb_pool:
+        default_lifetime: 3600
+        adapters:
+          - cache.adapter.array
+          - {
+              name: cache.adapter.psr6,
+              provider: 'rikudou.dynamo_cache.adapter',
+            }
+```
+
 ## Converters
 
 This bundle supports all instances of `\Psr\Cache\CacheItemInterface` with the use of converters which
