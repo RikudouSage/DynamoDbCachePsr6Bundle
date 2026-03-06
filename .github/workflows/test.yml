@@ -59,25 +59,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - phpVersion: '8.1'
-            symfonyVersion: '^6.0'
-          - phpVersion: '8.1'
-            symfonyVersion: '^7.0'
-          - phpVersion: '8.2'
-            symfonyVersion: '^6.0'
-          - phpVersion: '8.2'
-            symfonyVersion: '^7.0'
-          - phpVersion: '8.3'
-            symfonyVersion: '^6.0'
-          - phpVersion: '8.3'
-            symfonyVersion: '^7.0'
-          - phpVersion: '8.4'
-            symfonyVersion: '^6.0'
-          - phpVersion: '8.4'
-            symfonyVersion: '^7.0'
-          - phpVersion: '8.4'
-            symfonyVersion: '^8.0'
+        phpVersion: [ '8.1', '8.2', '8.3', '8.4' ]
+        symfonyVersion: [ ^6.0, ^7.0, ^8.0 ]
+        exclude:
+          - symfonyVersion: ^8.0
+            phpVersion: 8.1
+          - symfonyVersion: ^8.0
+            phpVersion: 8.2
+          - symfonyVersion: ^8.0
+            phpVersion: 8.3
+          - symfonyVersion: ^7.0
+            phpVersion: 8.1
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
