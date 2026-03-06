@@ -9,6 +9,7 @@ use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
 use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
+use Rikudou\DynamoDbCacheBundle\Provider\DynamoDbCacheProvider;
 use Rikudou\DynamoDbCacheBundle\Session\DynamoDbSessionHandler;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractDynamoDbTest;
 
@@ -37,23 +38,25 @@ final class DynamoDbSessionHandlerTest extends AbstractDynamoDbTest
     {
         $this->instance = new DynamoDbSessionHandler(
             new DynamoDbCacheAdapter(
-                new DynamoDbCache(
-                    'test',
-                    $this->getFakeDynamoDbClient($this->itemPool),
-                    'id',
-                    'ttl',
-                    'value',
-                    new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
-                    new CacheItemConverterRegistry(
-                        new SymfonyCacheItemConverter(
-                            new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
-                            new SerializeItemEncoder()
+                new DynamoDbCacheProvider(
+                    new DynamoDbCache(
+                        'test',
+                        $this->getFakeDynamoDbClient($this->itemPool),
+                        'id',
+                        'ttl',
+                        'value',
+                        new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                        new CacheItemConverterRegistry(
+                            new SymfonyCacheItemConverter(
+                                new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                                new SerializeItemEncoder()
+                            )
                         )
+                    ),
+                    new SymfonyCacheItemConverter(
+                        new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                        new SerializeItemEncoder()
                     )
-                ),
-                new SymfonyCacheItemConverter(
-                    new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
-                    new SerializeItemEncoder()
                 )
             ),
             'session_',

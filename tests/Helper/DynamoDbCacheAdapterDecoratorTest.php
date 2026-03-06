@@ -2,20 +2,18 @@
 
 namespace Rikudou\Tests\DynamoDbCacheBundle\Helper;
 
-use Psr\Cache\InvalidArgumentException;
 use Rikudou\Clock\Clock;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
 use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
 use Rikudou\DynamoDbCacheBundle\Helper\DynamoDbCacheAdapterDecorator;
+use Rikudou\DynamoDbCacheBundle\Provider\DynamoDbCacheProvider;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractDynamoDbTest;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\CacheItem;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\CallbackInterface;
 
-class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
+final class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
 {
     private DynamoDbCacheAdapter $originalInstance;
 
@@ -24,10 +22,12 @@ class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
     protected function setUp(): void
     {
         $this->originalInstance = new DynamoDbCacheAdapter(
-            new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
-            new SymfonyCacheItemConverter(
-                new Clock(),
-                new SerializeItemEncoder()
+            new DynamoDbCacheProvider(
+                new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
+                new SymfonyCacheItemConverter(
+                    new Clock(),
+                    new SerializeItemEncoder()
+                )
             )
         );
         $this->instance = new class ($this->originalInstance) implements AdapterInterface, CacheInterface {

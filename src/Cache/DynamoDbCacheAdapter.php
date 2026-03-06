@@ -7,6 +7,7 @@ use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Exception\InvalidArgumentException;
 use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
+use Rikudou\DynamoDbCacheBundle\Provider\DynamoDbCacheProvider;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -16,14 +17,20 @@ final class DynamoDbCacheAdapter implements AdapterInterface, CacheInterface
 {
     use CacheTrait;
 
-    /**
-     * @param DynamoDbCache             $cache
-     * @param SymfonyCacheItemConverter $converter
-     */
+    private DynamoDbCache $cache;
+
+    private SymfonyCacheItemConverter $converter;
+
+    // @phpstan-ignore-next-line
+    private string $namespace;
+
     public function __construct(
-        private DynamoDbCache $cache,
-        private SymfonyCacheItemConverter $converter
+        DynamoDbCacheProvider $provider,
+        string $namespace = '',
     ) {
+        $this->cache = $provider->cache;
+        $this->converter = $provider->converter;
+        $this->namespace = $namespace;
     }
 
     /**
