@@ -4,11 +4,13 @@ namespace Rikudou\Tests\DynamoDbCacheBundle;
 
 use AsyncAws\Core\Response;
 use AsyncAws\DynamoDb\DynamoDbClient;
+use AsyncAws\DynamoDb\Input\ScanInput;
 use AsyncAws\DynamoDb\Result\BatchGetItemOutput;
 use AsyncAws\DynamoDb\Result\BatchWriteItemOutput;
 use AsyncAws\DynamoDb\Result\DeleteItemOutput;
 use AsyncAws\DynamoDb\Result\GetItemOutput;
 use AsyncAws\DynamoDb\Result\PutItemOutput;
+use AsyncAws\DynamoDb\Result\ScanOutput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Psr\Log\NullLogger;
 use ReflectionObject;
@@ -227,13 +229,48 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
                     ]);
                 }
 
-                $client = new MockHttpClient(new MockResponse('{}'));
+                $client = new MockHttpClient(new MockResponse(json_encode([
+                    'UnprocessedItems' => [
+                        $table => [],
+                    ],
+                ])));
                 return new BatchWriteItemOutput(
                     new Response(
                         $client->request('GET', 'https://example.com'),
                         $client,
                         new NullLogger()
                     )
+                );
+            }
+
+            public function scan($input): ScanOutput
+            {
+                assert(is_array($input));
+                $reflection = new ReflectionObject($this->parent);
+                $pool = $reflection->getProperty('itemPoolSaved');
+                $pool->setAccessible(true);
+                $savePool = $pool->getValue($this->parent);
+
+                $items = array_merge($this->pool, $savePool);
+                if (isset($input['ExpressionAttributeValues'][':prefix']['S'])) {
+                    $prefix = $input['ExpressionAttributeValues'][':prefix']['S'];
+                    $items = array_filter($items, function (array $item) use ($prefix): bool {
+                        return str_starts_with($item[$this->idField]['S'], $prefix);
+                    });
+                }
+
+                $client = new MockHttpClient(new MockResponse(json_encode([
+                    'Items' => array_values($items),
+                ])));
+
+                return new ScanOutput(
+                    new Response(
+                        $client->request('GET', 'https://example.com'),
+                        $client,
+                        new NullLogger()
+                    ),
+                    $this,
+                    ScanInput::create($input)
                 );
             }
 
