@@ -8,7 +8,7 @@ use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use ReflectionProperty;
-use Rikudou\Clock\Clock;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Symfony\Component\Cache\CacheItem;
@@ -28,11 +28,6 @@ abstract class AbstractCacheItemTest extends TestCase
         $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
         $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
 
-        $keyReflection->setAccessible(true);
-        $hitReflection->setAccessible(true);
-        $valueReflection->setAccessible(true);
-        $expiryReflection->setAccessible(true);
-
         $keyReflection->setValue($item, $key);
         $hitReflection->setValue($item, $isHit);
         $valueReflection->setValue($item, $value);
@@ -50,7 +45,7 @@ abstract class AbstractCacheItemTest extends TestCase
         string $value = 'value',
         ?DateTimeInterface $dateTime = null
     ): DynamoCacheItem {
-        return new DynamoCacheItem($key, $isHit, $value, $dateTime, new Clock(), new SerializeItemEncoder());
+        return new DynamoCacheItem($key, $isHit, $value, $dateTime, ClockHelper::psrClock(), new SerializeItemEncoder());
     }
 
     protected function getRandomCacheItem(
@@ -103,8 +98,6 @@ abstract class AbstractCacheItemTest extends TestCase
     protected function getExpiry(CacheItem $cacheItem): ?DateTimeImmutable
     {
         $reflection = new ReflectionProperty(CacheItem::class, 'expiry');
-        $reflection->setAccessible(true);
-
         $expiry = $reflection->getValue($cacheItem);
         if ($expiry === null) {
             return null;

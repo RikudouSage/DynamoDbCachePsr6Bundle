@@ -3,8 +3,8 @@
 namespace Rikudou\Tests\DynamoDbCacheBundle\Session;
 
 use DateTimeImmutable;
-use Rikudou\Clock\TestClock;
 use Rikudou\DynamoDbCache\Converter\CacheItemConverterRegistry;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
@@ -43,16 +43,16 @@ final class DynamoDbSessionHandlerTest extends AbstractDynamoDbTest
                     'id',
                     'ttl',
                     'value',
-                    new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                    ClockHelper::fixedTimeClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                     new CacheItemConverterRegistry(
                         new SymfonyCacheItemConverter(
-                            new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                            ClockHelper::fixedTimeClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                             new SerializeItemEncoder()
                         )
                     )
                 ),
                 new SymfonyCacheItemConverter(
-                    new TestClock(new DateTimeImmutable('2030-01-01 15:00:00')),
+                    ClockHelper::fixedTimeClock(new DateTimeImmutable('2030-01-01 15:00:00')),
                     new SerializeItemEncoder()
                 )
             ),

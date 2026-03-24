@@ -4,9 +4,9 @@ namespace Rikudou\DynamoDbCacheBundle\Converter;
 
 use DateTime;
 use Psr\Cache\CacheItemInterface;
+use Psr\Clock\ClockInterface as PsrClock;
 use ReflectionException;
 use ReflectionProperty;
-use Rikudou\Clock\ClockInterface;
 use Rikudou\DynamoDbCache\Converter\CacheItemConverterInterface;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Cache\CacheItem;
 final class SymfonyCacheItemConverter implements CacheItemConverterInterface
 {
     public function __construct(
-        private ClockInterface $clock,
+        private PsrClock $clock,
         private CacheItemEncoderInterface $encoder,
     ) {
     }
@@ -32,7 +32,6 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
         // in a try-catch block in case the internal workings of CacheItem change
         try {
             $reflectionExpiry = new ReflectionProperty(CacheItem::class, 'expiry');
-            $reflectionExpiry->setAccessible(true);
             $value = $reflectionExpiry->getValue($cacheItem);
             assert(is_scalar($value) || $value === null);
 
@@ -67,11 +66,6 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
         $isHitReflection = new ReflectionProperty(CacheItem::class, 'isHit');
         $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
         $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
-
-        $keyReflection->setAccessible(true);
-        $isHitReflection->setAccessible(true);
-        $valueReflection->setAccessible(true);
-        $expiryReflection->setAccessible(true);
 
         $keyReflection->setValue($item, $dynamoCacheItem->getKey());
         $isHitReflection->setValue($item, $dynamoCacheItem->isHit());

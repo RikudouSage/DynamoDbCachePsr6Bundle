@@ -3,7 +3,7 @@
 namespace Rikudou\Tests\DynamoDbCacheBundle\Helper;
 
 use Psr\Cache\InvalidArgumentException;
-use Rikudou\Clock\Clock;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
@@ -26,7 +26,7 @@ class DynamoDbCacheAdapterDecoratorTest extends AbstractDynamoDbTest
         $this->originalInstance = new DynamoDbCacheAdapter(
             new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
             new SymfonyCacheItemConverter(
-                new Clock(),
+                ClockHelper::psrClock(),
                 new SerializeItemEncoder()
             )
         );
