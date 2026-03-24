@@ -2,7 +2,7 @@
 
 namespace Rikudou\Tests\DynamoDbCacheBundle\Cache;
 
-use Rikudou\Clock\Clock;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Rikudou\DynamoDbCache\DynamoDbCache;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Cache\DynamoDbCacheAdapter;
@@ -23,7 +23,7 @@ final class DynamoDbCacheAdapterTest extends AbstractDynamoDbTest
         $this->instance = new DynamoDbCacheAdapter(
             new DynamoDbCache('test', $this->getFakeDynamoDbClient($this->itemPoolDefault)),
             new SymfonyCacheItemConverter(
-                new Clock(),
+                ClockHelper::psrClock(),
                 new SerializeItemEncoder()
             )
         );

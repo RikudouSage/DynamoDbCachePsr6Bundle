@@ -1,6 +1,6 @@
 services:
   rikudou.clock.default:
-    class: Rikudou\Clock\Clock
+    factory: ['Rikudou\DynamoDbCache\Helper\ClockHelper', 'psrClock']
 
   rikudou.dynamo_cache.encoder.serialize:
     class: Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder
