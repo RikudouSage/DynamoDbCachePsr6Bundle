@@ -7,22 +7,17 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Clock\ClockInterface as PsrClock;
 use ReflectionException;
 use ReflectionProperty;
-use Rikudou\Clock\ClockInterface as RikudouClock;
 use Rikudou\DynamoDbCache\Converter\CacheItemConverterInterface;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface;
-use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Symfony\Component\Cache\CacheItem;
 
 final class SymfonyCacheItemConverter implements CacheItemConverterInterface
 {
-    private PsrClock $clock;
-
     public function __construct(
-        RikudouClock|PsrClock $clock,
+        private PsrClock $clock,
         private CacheItemEncoderInterface $encoder,
     ) {
-      $this->clock = ClockHelper::psrClock($clock);
     }
 
     public function supports(CacheItemInterface $cacheItem): bool
@@ -37,7 +32,6 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
         // in a try-catch block in case the internal workings of CacheItem change
         try {
             $reflectionExpiry = new ReflectionProperty(CacheItem::class, 'expiry');
-            $reflectionExpiry->setAccessible(true);
             $value = $reflectionExpiry->getValue($cacheItem);
             assert(is_scalar($value) || $value === null);
 
@@ -72,11 +66,6 @@ final class SymfonyCacheItemConverter implements CacheItemConverterInterface
         $isHitReflection = new ReflectionProperty(CacheItem::class, 'isHit');
         $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
         $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
-
-        $keyReflection->setAccessible(true);
-        $isHitReflection->setAccessible(true);
-        $valueReflection->setAccessible(true);
-        $expiryReflection->setAccessible(true);
 
         $keyReflection->setValue($item, $dynamoCacheItem->getKey());
         $isHitReflection->setValue($item, $dynamoCacheItem->isHit());

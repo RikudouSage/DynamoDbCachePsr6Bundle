@@ -96,7 +96,6 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
 
                 $reflection = new ReflectionObject($this->parent);
                 $pool = $reflection->getProperty('itemPoolSaved');
-                $pool->setAccessible(true);
                 $savePool = $pool->getValue($this->parent);
 
                 $availableIds = array_merge(
@@ -180,8 +179,6 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
 
                 $reflection = new ReflectionObject($this->parent);
                 $pool = $reflection->getProperty('itemPoolSaved');
-                $pool->setAccessible(true);
-
                 $currentPool = $pool->getValue($this->parent);
 
                 foreach ($currentPool as $index => $item) {
@@ -248,7 +245,6 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
                 assert(is_array($input));
                 $reflection = new ReflectionObject($this->parent);
                 $pool = $reflection->getProperty('itemPoolSaved');
-                $pool->setAccessible(true);
                 $savePool = $pool->getValue($this->parent);
 
                 $items = array_merge($this->pool, $savePool);
@@ -278,8 +274,6 @@ abstract class AbstractDynamoDbTest extends AbstractCacheItemTest
             {
                 $reflection = new ReflectionObject($this->parent);
                 $pool = $reflection->getProperty('itemPoolSaved');
-                $pool->setAccessible(true);
-
                 $currentPool = $pool->getValue($this->parent);
                 $currentPool[] = $input['Item'];
 

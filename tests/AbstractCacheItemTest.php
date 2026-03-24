@@ -28,11 +28,6 @@ abstract class AbstractCacheItemTest extends TestCase
         $valueReflection = new ReflectionProperty(CacheItem::class, 'value');
         $expiryReflection = new ReflectionProperty(CacheItem::class, 'expiry');
 
-        $keyReflection->setAccessible(true);
-        $hitReflection->setAccessible(true);
-        $valueReflection->setAccessible(true);
-        $expiryReflection->setAccessible(true);
-
         $keyReflection->setValue($item, $key);
         $hitReflection->setValue($item, $isHit);
         $valueReflection->setValue($item, $value);
@@ -103,8 +98,6 @@ abstract class AbstractCacheItemTest extends TestCase
     protected function getExpiry(CacheItem $cacheItem): ?DateTimeImmutable
     {
         $reflection = new ReflectionProperty(CacheItem::class, 'expiry');
-        $reflection->setAccessible(true);
-
         $expiry = $reflection->getValue($cacheItem);
         if ($expiry === null) {
             return null;
