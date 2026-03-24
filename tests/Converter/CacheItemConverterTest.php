@@ -3,7 +3,7 @@
 namespace Rikudou\Tests\DynamoDbCacheBundle\Converter;
 
 use DateTime;
-use Rikudou\Clock\Clock;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Rikudou\DynamoDbCache\Encoder\SerializeItemEncoder;
 use Rikudou\DynamoDbCacheBundle\Converter\SymfonyCacheItemConverter;
 use Rikudou\Tests\DynamoDbCacheBundle\AbstractCacheItemTest;
@@ -18,7 +18,7 @@ final class CacheItemConverterTest extends AbstractCacheItemTest
     protected function setUp(): void
     {
         $this->instance = new SymfonyCacheItemConverter(
-            new Clock(),
+            ClockHelper::psrClock(),
             new SerializeItemEncoder()
         );
     }

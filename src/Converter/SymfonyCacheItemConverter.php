@@ -4,20 +4,25 @@ namespace Rikudou\DynamoDbCacheBundle\Converter;
 
 use DateTime;
 use Psr\Cache\CacheItemInterface;
+use Psr\Clock\ClockInterface as PsrClock;
 use ReflectionException;
 use ReflectionProperty;
-use Rikudou\Clock\ClockInterface;
+use Rikudou\Clock\ClockInterface as RikudouClock;
 use Rikudou\DynamoDbCache\Converter\CacheItemConverterInterface;
 use Rikudou\DynamoDbCache\DynamoCacheItem;
 use Rikudou\DynamoDbCache\Encoder\CacheItemEncoderInterface;
+use Rikudou\DynamoDbCache\Helper\ClockHelper;
 use Symfony\Component\Cache\CacheItem;
 
 final class SymfonyCacheItemConverter implements CacheItemConverterInterface
 {
+    private PsrClock $clock;
+
     public function __construct(
-        private ClockInterface $clock,
+        RikudouClock|PsrClock $clock,
         private CacheItemEncoderInterface $encoder,
     ) {
+      $this->clock = ClockHelper::psrClock($clock);
     }
 
     public function supports(CacheItemInterface $cacheItem): bool
